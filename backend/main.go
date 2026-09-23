@@ -1,0 +1,86 @@
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/joho/godotenv"
+
+	"peekpanel/handlers"
+	"peekpanel/middleware"
+)
+
+func main() {
+	// Load .env
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Gagal membaca file .env:", err)
+	}
+
+	// Database connection
+	databaseURL := os.Getenv("DATABASE_URL")
+
+	if databaseURL == "" {
+		log.Fatal("DATABASE_URL tidak ditemukan")
+	}
+
+	conn, err := pgx.Connect(context.Background(), databaseURL)
+	if err != nil {
+		log.Fatal("Gagal terhubung ke PostgreSQL:", err)
+	}
+	defer conn.Close(context.Background())
+
+	if err := conn.Ping(context.Background()); err != nil {
+		log.Fatal("Database tidak merespons:", err)
+	}
+
+	log.Println("✅ Berhasil terhubung ke Neon PostgreSQL!")
+
+	// API routes
+	http.HandleFunc("/api/health", healthHandler)
+	http.HandleFunc("/api/auth/register", handlers.Register(conn))
+	http.HandleFunc("/api/auth/login", handlers.Login(conn))
+	http.HandleFunc("/api/me", middleware.Auth(handlers.Me(conn)))
+	http.HandleFunc("/api/peeks", middleware.Auth(handlers.Peeks(conn)))
+	http.HandleFunc("/api/peeks/{id}", middleware.Auth(handlers.Peeks(conn)))
+	http.HandleFunc("/api/categories", middleware.Auth(handlers.GetCategories(conn)))
+
+	log.Println("🚀 PeekPanel API running on http://localhost:8080")
+
+	log.Fatal(http.ListenAndServe(":8080", withCORS(http.DefaultServeMux)))
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	response := map[string]string{
+		"status":  "ok",
+		"message": "PeekPanel API is running",
+	}
+
+	json.NewEncoder(w).Encode(response)
+}
+
+func withCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:4200")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}

@@ -1,0 +1,82 @@
+<div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+  <h2 class="text-xl font-semibold">
+    {{ editingPeek ? 'Edit Peek' : 'Create New Peek' }}
+  </h2>
+
+  <p class="mt-1 text-sm text-zinc-400">
+    {{ editingPeek ? 'Update your saved Peek.' : 'Save something you want to access quickly.' }}
+  </p>
+
+  @if (successMessage) {
+    <div
+      class="mb-4 rounded-lg border border-emerald-900 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-300"
+    >
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="mb-4 rounded-lg border border-red-900 bg-red-950/40 px-4 py-3 text-sm text-red-300">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <form class="mt-6 space-y-5" (ngSubmit)="onSubmit()">
+    <div>
+      <label class="mb-2 block text-sm font-medium text-zinc-300"> Title </label>
+
+      <input
+        type="text"
+        [(ngModel)]="title"
+        name="title"
+        placeholder="e.g. Laravel JWT Authentication"
+        class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-zinc-500"
+      />
+    </div>
+
+    <div>
+      <label class="mb-2 block text-sm font-medium text-zinc-300"> Category </label>
+
+      <select
+        [(ngModel)]="categoryId"
+        name="categoryId"
+        class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-white outline-none transition focus:border-zinc-500"
+      >
+        @for (category of categories(); track category.id) {
+          <option [value]="category.id">
+            {{ category.name }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div>
+      <label class="mb-2 block text-sm font-medium text-zinc-300"> Content </label>
+
+      <textarea
+        [(ngModel)]="content"
+        name="content"
+        rows="8"
+        placeholder="Write your notes, reference, walkthrough..."
+        class="w-full resize-y rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-zinc-500"
+      ></textarea>
+    </div>
+
+    <div class="flex justify-end gap-3">
+      <button
+        type="button"
+        (click)="cancelled.emit()"
+        class="rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-300 hover:border-zinc-500 hover:text-white"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-zinc-900 hover:bg-zinc-200"
+      >
+        {{ editingPeek ? 'Update Peek' : 'Save Peek' }}
+      </button>
+    </div>
+  </form>
+</div>

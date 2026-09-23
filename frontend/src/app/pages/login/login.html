@@ -1,0 +1,80 @@
+<div class="min-h-screen bg-zinc-950 text-white flex items-center justify-center px-4">
+  <div class="w-full max-w-md">
+    <!-- Logo / Brand -->
+    <div class="text-center mb-8">
+      <div
+        class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white text-zinc-950 font-bold text-xl mb-4"
+      >
+        P
+      </div>
+
+      <h1 class="text-3xl font-bold tracking-tight">PeekPanel</h1>
+
+      <p class="text-zinc-400 mt-2">Your knowledge, always within reach.</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl">
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold">Welcome back</h2>
+
+        <p class="text-sm text-zinc-400 mt-1">Sign in to continue to PeekPanel.</p>
+      </div>
+
+      <form class="space-y-5" (ngSubmit)="onSubmit()">
+        <!-- Email -->
+        @if (errorMessage) {
+          <div
+            class="rounded-lg border border-red-900/50 bg-red-950/30 px-4 py-3 text-sm text-red-400"
+          >
+            {{ errorMessage }}
+          </div>
+        }
+        <div>
+          <label for="email" class="block text-sm font-medium text-zinc-300 mb-2"> Email </label>
+
+          <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="you@example.com"
+            class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white placeholder-zinc-500 outline-none transition focus:border-zinc-400"
+          />
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-zinc-300 mb-2">
+            Password
+          </label>
+
+          <input
+            id="password"
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="••••••••"
+            class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white placeholder-zinc-500 outline-none transition focus:border-zinc-400"
+          />
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="w-full rounded-lg bg-white px-4 py-3 font-semibold text-zinc-950 transition hover:bg-zinc-200"
+        >
+          Sign In
+        </button>
+      </form>
+
+      <!-- Register -->
+      <p class="text-center text-sm text-zinc-400 mt-6">
+        Don't have an account?
+        <a href="#" class="text-white font-medium hover:underline"> Create one </a>
+      </p>
+    </div>
+
+    <p class="text-center text-xs text-zinc-600 mt-6">PeekPanel</p>
+  </div>
+</div>

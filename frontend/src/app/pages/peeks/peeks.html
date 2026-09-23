@@ -1,0 +1,87 @@
+<div class="min-h-screen bg-zinc-950 text-white">
+  <div class="mx-auto max-w-6xl px-6 py-8">
+    <header class="mb-8 flex items-center justify-between">
+      <div>
+        <p class="text-sm text-zinc-500">PeekPanel</p>
+
+        <h1 class="mt-2 text-3xl font-bold">My Peeks</h1>
+
+        <p class="mt-2 text-zinc-400">Your notes, references, walkthroughs, and snippets.</p>
+      </div>
+
+      <button
+        type="button"
+        (click)="toggleCreateForm()"
+        class="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-200"
+      >
+        + New Peek
+      </button>
+    </header>
+
+    @if (showCreateForm()) {
+      <div class="mb-8">
+        <app-create-peek
+          [editingPeek]="editingPeek()"
+          (peekCreated)="onPeekSaved()"
+          (cancelled)="toggleCreateForm()"
+        />
+      </div>
+    }
+
+    @if (errorMessage()) {
+      <div
+        class="mb-6 rounded-lg border border-red-900 bg-red-950/40 px-4 py-3 text-sm text-red-300"
+      >
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (peeks().length === 0 && !errorMessage()) {
+      <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center">
+        <p class="text-zinc-400">Belum ada Peek.</p>
+      </div>
+    }
+
+    <div class="grid gap-4 md:grid-cols-2">
+      @for (peek of peeks(); track peek.id) {
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+          <div class="mb-4 flex items-start justify-between gap-4">
+            <div>
+              <h2 class="text-lg font-semibold">
+                {{ peek.title }}
+              </h2>
+
+              <span
+                class="mt-2 inline-block rounded-full bg-zinc-800 px-3 py-1 text-xs text-zinc-400"
+              >
+                {{ peek.category_name }}
+              </span>
+            </div>
+          </div>
+
+          <p class="whitespace-pre-wrap text-sm leading-6 text-zinc-400">
+            {{ peek.content }}
+          </p>
+
+          <div class="mt-6 flex gap-2">
+            <button
+              type="button"
+              (click)="editPeek(peek)"
+              class="rounded-lg border border-zinc-700 px-3 py-2 text-sm text-zinc-300 transition hover:border-zinc-500 hover:text-white"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              (click)="deletePeek(peek)"
+              class="rounded-lg border border-red-900 px-3 py-2 text-sm text-red-400 transition hover:border-red-700 hover:text-red-300"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
