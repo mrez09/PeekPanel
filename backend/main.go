@@ -15,11 +15,9 @@ import (
 )
 
 func main() {
-	// Load .env
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Gagal membaca file .env:", err)
-	}
+	// Load .env jika tersedia (untuk development lokal)
+	_ = godotenv.Load()
+	
 
 	// Database connection
 	databaseURL := os.Getenv("DATABASE_URL")
