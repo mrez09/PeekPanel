@@ -49,9 +49,17 @@ func main() {
 	http.HandleFunc("/api/peeks/{id}", middleware.Auth(handlers.Peeks(conn)))
 	http.HandleFunc("/api/categories", middleware.Auth(handlers.GetCategories(conn)))
 
-	log.Println("🚀 PeekPanel API running on http://localhost:8080")
+	//log.Println("🚀 PeekPanel API running on http://localhost:8080")
 
-	log.Fatal(http.ListenAndServe(":8080", withCORS(http.DefaultServeMux)))
+	//log.Fatal(http.ListenAndServe(":8080", withCORS(http.DefaultServeMux)))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Println("🚀 PeekPanel API running on port " + port)
+
+	log.Fatal(http.ListenAndServe(":"+port, withCORS(http.DefaultServeMux)))
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
