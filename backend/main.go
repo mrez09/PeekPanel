@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 
 	"peekpanel/handlers"
@@ -26,13 +26,15 @@ func main() {
 		log.Fatal("DATABASE_URL tidak ditemukan")
 	}
 
-	conn, err := pgx.Connect(context.Background(), databaseURL)
-	if err != nil {
-		log.Fatal("Gagal terhubung ke PostgreSQL:", err)
-	}
-	defer conn.Close(context.Background())
+	pool, err := pgxpool.New(context.Background(), databaseURL)
 
-	if err := conn.Ping(context.Background()); err != nil {
+	if err != nil {
+		log.Fatal("Gagal membuat connection pool:", err)
+	}
+
+	defer pool.Close()
+
+	if err := pool.Ping(context.Background()); err != nil {
 		log.Fatal("Database tidak merespons:", err)
 	}
 
@@ -40,12 +42,12 @@ func main() {
 
 	// API routes
 	http.HandleFunc("/api/health", healthHandler)
-	http.HandleFunc("/api/auth/register", handlers.Register(conn))
-	http.HandleFunc("/api/auth/login", handlers.Login(conn))
-	http.HandleFunc("/api/me", middleware.Auth(handlers.Me(conn)))
-	http.HandleFunc("/api/peeks", middleware.Auth(handlers.Peeks(conn)))
-	http.HandleFunc("/api/peeks/{id}", middleware.Auth(handlers.Peeks(conn)))
-	http.HandleFunc("/api/categories", middleware.Auth(handlers.GetCategories(conn)))
+	http.HandleFunc("/api/auth/register", handlers.Register(pool))
+	http.HandleFunc("/api/auth/login", handlers.Login(pool))
+	http.HandleFunc("/api/me", middleware.Auth(handlers.Me(pool)))
+	http.HandleFunc("/api/peeks", middleware.Auth(handlers.Peeks(pool)))
+	http.HandleFunc("/api/peeks/{id}", middleware.Auth(handlers.Peeks(pool)))
+	http.HandleFunc("/api/categories", middleware.Auth(handlers.GetCategories(pool)))
 
 	//log.Println("🚀 PeekPanel API running on http://localhost:8080")
 

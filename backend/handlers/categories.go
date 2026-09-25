@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func GetCategories(conn *pgx.Conn) http.HandlerFunc {
+func GetCategories(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		rows, err := conn.Query(
+		rows, err := pool.Query(
 			r.Context(),
 			`
 			SELECT id, name

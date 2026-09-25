@@ -37,6 +37,16 @@ export class PeekService {
     });
   }
 
+  getPeek(id: number): Observable<Peek> {
+    const token = localStorage.getItem('token');
+
+    return this.http.get<Peek>(`${this.apiUrl}/peeks/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
   getCategories(): Observable<{ id: number; name: string }[]> {
     const token = localStorage.getItem('token');
 

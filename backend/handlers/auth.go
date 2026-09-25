@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"golang.org/x/crypto/bcrypt"
 	"peekpanel/models"
 	"github.com/golang-jwt/jwt/v5"
@@ -22,7 +23,7 @@ type RegisterRequest struct {
 	Password string `json:"password"`
 }
 
-func Register(conn *pgx.Conn) http.HandlerFunc {
+func Register(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -62,7 +63,7 @@ func Register(conn *pgx.Conn) http.HandlerFunc {
 
 		var userID int64
 
-		err = conn.QueryRow(
+		err = pool.QueryRow(
 			context.Background(),
 			`INSERT INTO users (name, email, password)
 			 VALUES ($1, $2, $3)
@@ -105,7 +106,7 @@ type LoginRequest struct {
 }
 
 
-func Login(conn *pgx.Conn) http.HandlerFunc {
+func Login(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -134,7 +135,7 @@ func Login(conn *pgx.Conn) http.HandlerFunc {
 			passwordHash string
 		)
 
-		err = conn.QueryRow(
+		err = pool.QueryRow(
 			context.Background(),
 			`SELECT id, name, email, password
 			 FROM users
@@ -212,14 +213,14 @@ func Login(conn *pgx.Conn) http.HandlerFunc {
 	}
 }
 
-func Me(conn *pgx.Conn) http.HandlerFunc {
+func Me(pool *pgxpool.Pool) http.HandlerFunc {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         userID := r.Context().Value("userID")
 
         var name string
         var email string
 
-        err := conn.QueryRow(
+        err := pool.QueryRow(
             r.Context(),
             "SELECT name, email FROM users WHERE id = $1",
             userID,

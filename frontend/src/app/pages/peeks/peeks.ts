@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { PeekService } from '../../services/peek.service';
 import { CreatePeek } from './create-peek';
 
@@ -25,7 +26,10 @@ export class Peeks implements OnInit {
   peeks = signal<Peek[]>([]);
   errorMessage = signal('');
 
-  constructor(private peekService: PeekService) {}
+  constructor(
+    private peekService: PeekService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     this.loadPeeks();
@@ -50,6 +54,10 @@ export class Peeks implements OnInit {
   editPeek(peek: Peek) {
     this.editingPeek.set(peek);
     this.showCreateForm.set(true);
+  }
+
+  viewPeek(peek: Peek) {
+    this.router.navigate(['/peeks', peek.id]);
   }
 
   deletePeek(peek: Peek) {

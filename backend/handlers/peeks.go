@@ -5,14 +5,14 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func GetPeeks(conn *pgx.Conn) http.HandlerFunc {
+func GetPeeks(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID := r.Context().Value("userID")
 
-		rows, err := conn.Query(
+		rows, err := pool.Query(
 			r.Context(),
 			`
 			SELECT
@@ -80,7 +80,61 @@ func GetPeeks(conn *pgx.Conn) http.HandlerFunc {
 	}
 }
 
-func CreatePeek(conn *pgx.Conn) http.HandlerFunc {
+func GetPeek(pool *pgxpool.Pool) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		userID := r.Context().Value("userID")
+		peekID := r.PathValue("id")
+
+		type PeekResponse struct {
+			ID           int64     `json:"id"`
+			Title        string    `json:"title"`
+			Content      string    `json:"content"`
+			CategoryID   int64     `json:"category_id"`
+			CategoryName string    `json:"category_name"`
+			CreatedAt    time.Time `json:"created_at"`
+			UpdatedAt    time.Time `json:"updated_at"`
+		}
+
+		var peek PeekResponse
+
+		err := pool.QueryRow(
+			r.Context(),
+			`
+			SELECT
+				p.id,
+				p.title,
+				p.content,
+				p.category_id,
+				c.name AS category_name,
+				p.created_at,
+				p.updated_at
+			FROM peeks p
+			JOIN categories c ON c.id = p.category_id
+			WHERE p.id = $1 AND p.user_id = $2
+			`,
+			peekID,
+			userID,
+		).Scan(
+			&peek.ID,
+			&peek.Title,
+			&peek.Content,
+			&peek.CategoryID,
+			&peek.CategoryName,
+			&peek.CreatedAt,
+			&peek.UpdatedAt,
+		)
+
+		if err != nil {
+			http.Error(w, `{"message":"Peek not found"}`, http.StatusNotFound)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(peek)
+	}
+}
+
+func CreatePeek(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID := r.Context().Value("userID")
 
@@ -105,7 +159,7 @@ func CreatePeek(conn *pgx.Conn) http.HandlerFunc {
 
 		var peekID int64
 
-		err = conn.QueryRow(
+		err = pool.QueryRow(
 			r.Context(),
 			`
 			INSERT INTO peeks (user_id, category_id, title, content)
@@ -134,20 +188,25 @@ func CreatePeek(conn *pgx.Conn) http.HandlerFunc {
 	}
 }
 
-func Peeks(conn *pgx.Conn) http.HandlerFunc {
+func Peeks(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			GetPeeks(conn)(w, r)
+			if r.PathValue("id") != "" {
+				GetPeek(pool)(w, r)
+				return
+			}
+
+			GetPeeks(pool)(w, r)
 
 		case http.MethodPost:
-			CreatePeek(conn)(w, r)
+			CreatePeek(pool)(w, r)
 
 		case http.MethodPut:
-			UpdatePeek(conn)(w, r)
+			UpdatePeek(pool)(w, r)
 
 		case http.MethodDelete:
-			DeletePeek(conn)(w, r)
+			DeletePeek(pool)(w, r)
 
 		default:
 			http.Error(w, `{"message":"Method not allowed"}`, http.StatusMethodNotAllowed)
@@ -155,7 +214,7 @@ func Peeks(conn *pgx.Conn) http.HandlerFunc {
 	}
 }
 
-func UpdatePeek(conn *pgx.Conn) http.HandlerFunc {
+func UpdatePeek(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID := r.Context().Value("userID")
 
@@ -180,7 +239,7 @@ func UpdatePeek(conn *pgx.Conn) http.HandlerFunc {
 			return
 		}
 
-		result, err := conn.Exec(
+		result, err := pool.Exec(
 			r.Context(),
 			`
 			UPDATE peeks
@@ -217,12 +276,12 @@ func UpdatePeek(conn *pgx.Conn) http.HandlerFunc {
 	}
 }
 
-func DeletePeek(conn *pgx.Conn) http.HandlerFunc {
+func DeletePeek(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID := r.Context().Value("userID")
 		peekID := r.PathValue("id")
 
-		result, err := conn.Exec(
+		result, err := pool.Exec(
 			r.Context(),
 			`
 			DELETE FROM peeks

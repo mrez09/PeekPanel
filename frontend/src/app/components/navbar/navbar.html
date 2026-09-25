@@ -1,0 +1,39 @@
+<nav class="border-b border-zinc-800 bg-zinc-950">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <a routerLink="/dashboard" class="text-lg font-bold tracking-tight text-white"> PeekPanel </a>
+
+    <div class="flex items-center gap-1">
+      <button
+        type="button"
+        (click)="openOverlay()"
+        class="rounded-lg px-3 py-2 text-sm text-zinc-400 transition hover:bg-zinc-900 hover:text-white"
+      >
+        Popup
+      </button>
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="bg-zinc-800 text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="rounded-lg px-3 py-2 text-sm text-zinc-400 transition hover:bg-zinc-900 hover:text-white"
+      >
+        Dashboard
+      </a>
+
+      <a
+        routerLink="/peeks"
+        routerLinkActive="bg-zinc-800 text-white"
+        class="rounded-lg px-3 py-2 text-sm text-zinc-400 transition hover:bg-zinc-900 hover:text-white"
+      >
+        Peeks
+      </a>
+
+      <button
+        type="button"
+        (click)="logout()"
+        class="ml-2 rounded-lg border border-zinc-700 px-3 py-2 text-sm text-zinc-300 transition hover:border-zinc-500 hover:text-white"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>
