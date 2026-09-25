@@ -1,0 +1,155 @@
+<div class="min-h-screen bg-zinc-950 px-6 py-10 text-white">
+  <div class="mx-auto max-w-5xl">
+    <button
+      type="button"
+      (click)="goBack()"
+      class="mb-8 text-sm text-zinc-400 transition hover:text-white"
+    >
+      ← Back to Playlists
+    </button>
+
+    @if (errorMessage()) {
+      <div class="rounded-xl border border-red-900 bg-red-950/40 px-4 py-3 text-sm text-red-300">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (playlist(); as currentPlaylist) {
+      <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
+        <div class="flex items-start justify-between gap-6">
+          <div>
+            <h1 class="text-3xl font-bold">
+              {{ currentPlaylist.name }}
+            </h1>
+
+            @if (currentPlaylist.description) {
+              <p class="mt-3 max-w-2xl leading-7 text-zinc-400">
+                {{ currentPlaylist.description }}
+              </p>
+            }
+          </div>
+
+          <button
+            type="button"
+            (click)="deletePlaylist()"
+            class="rounded-xl border border-red-900 px-4 py-2 text-sm text-red-400 transition hover:bg-red-950/40"
+          >
+            Delete
+          </button>
+        </div>
+
+        <div class="mt-8 border-t border-zinc-800 pt-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-lg font-semibold">Playlist Peeks</h2>
+
+              <p class="mt-1 text-sm text-zinc-500">Peeks yang berada di dalam playlist ini.</p>
+            </div>
+
+            <button
+              type="button"
+              (click)="openAddPeek()"
+              class="rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-zinc-900 transition hover:bg-zinc-200"
+            >
+              + Add Peek
+            </button>
+          </div>
+
+          <div class="mt-6 rounded-xl border border-dashed border-zinc-800 p-8 text-center">
+            <p class="text-zinc-500">Belum ada Peek di playlist ini.</p>
+          </div>
+        </div>
+
+        <div class="mt-8 text-xs text-zinc-600">
+          Created:
+          {{ currentPlaylist.created_at | date: 'dd MMM yyyy' }}
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Modal Playlist -->
+  @if (showAddPeek()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6">
+      <div class="w-full max-w-lg rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-2xl">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-semibold">Add Peek</h2>
+
+            <p class="mt-1 text-sm text-zinc-500">Pilih Peek yang ingin dimasukkan ke playlist.</p>
+          </div>
+
+          <button
+            type="button"
+            (click)="closeAddPeek()"
+            class="text-zinc-500 transition hover:text-white"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div class="mt-6 max-h-80 space-y-2 overflow-y-auto">
+          @if (availablePeeks().length === 0) {
+            <div class="rounded-xl border border-zinc-800 p-6 text-center">
+              <p class="text-sm text-zinc-500">Belum ada Peek.</p>
+            </div>
+          }
+
+          @for (peek of availablePeeks(); track peek.id) {
+            <button
+              type="button"
+              (click)="togglePeek(peek.id)"
+              class="flex w-full items-center gap-4 rounded-xl border p-4 text-left transition"
+              [class.border-white]="selectedPeekIds().includes(peek.id)"
+              [class.bg-zinc-800]="selectedPeekIds().includes(peek.id)"
+              [class.border-zinc-800]="!selectedPeekIds().includes(peek.id)"
+            >
+              <div
+                class="flex h-5 w-5 shrink-0 items-center justify-center rounded border"
+                [class.border-white]="selectedPeekIds().includes(peek.id)"
+                [class.bg-white]="selectedPeekIds().includes(peek.id)"
+              >
+                @if (selectedPeekIds().includes(peek.id)) {
+                  <span class="text-xs text-zinc-900">✓</span>
+                }
+              </div>
+
+              <div class="min-w-0">
+                <p class="truncate font-medium">
+                  {{ peek.title }}
+                </p>
+
+                <p class="mt-1 text-xs text-zinc-500">
+                  {{ peek.category_name }}
+                </p>
+              </div>
+            </button>
+          }
+        </div>
+
+        <div class="mt-6 flex items-center justify-between border-t border-zinc-800 pt-5">
+          <span class="text-sm text-zinc-500"> {{ selectedPeekIds().length }} dipilih </span>
+
+          <div class="flex gap-3">
+            <button
+              type="button"
+              (click)="closeAddPeek()"
+              class="rounded-xl px-4 py-2.5 text-sm text-zinc-400 transition hover:bg-zinc-800 hover:text-white"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              (click)="addSelectedPeeks()"
+              [disabled]="selectedPeekIds().length === 0"
+              class="rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-zinc-900 transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Add Selected
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
