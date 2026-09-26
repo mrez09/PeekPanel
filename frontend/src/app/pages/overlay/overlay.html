@@ -71,7 +71,58 @@
         <p class="text-xs text-zinc-600">{{ filteredPeeks().length }} peeks</p>
       </div>
     } @else {
-      <!-- DETAIL -->
+      <!-- Detail New-->
+
+      @if (currentPlaylistPeek(); as peek) {
+        <div class="min-h-screen bg-zinc-950 p-5 text-white">
+          <div class="flex h-full flex-col">
+            <!-- Header -->
+            <div class="mb-5">
+              <span class="rounded-lg bg-zinc-800 px-3 py-1.5 text-xs text-zinc-400">
+                {{ peek.category_name }}
+              </span>
+
+              <h1 class="mt-3 text-xl font-bold">
+                {{ peek.title }}
+              </h1>
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+              <p class="whitespace-pre-wrap text-sm leading-6 text-zinc-300">
+                {{ peek.content }}
+              </p>
+            </div>
+
+            <!-- Navigation -->
+            <div class="mt-4 flex items-center justify-between border-t border-zinc-800 pt-4">
+              <button
+                type="button"
+                (click)="previousPlaylistPeek()"
+                [disabled]="isFirstPlaylistPeek()"
+                class="rounded-lg border border-zinc-700 px-3 py-2 text-xs text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-30"
+              >
+                &lt; Previous
+              </button>
+
+              <span class="text-xs text-zinc-500">
+                {{ getPlaylistPeekPosition() }} / {{ playlistPeeks().length }}
+              </span>
+
+              <button
+                type="button"
+                (click)="nextPlaylistPeek()"
+                [disabled]="isLastPlaylistPeek()"
+                class="rounded-lg border border-zinc-700 px-3 py-2 text-xs text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-30"
+              >
+                Next &gt;
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- DETAIL old -->
       @if (selectedPeek(); as peek) {
         <header class="mb-5 flex items-center justify-between gap-3">
           <button

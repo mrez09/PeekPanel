@@ -11,6 +11,15 @@ export interface Playlist {
   updated_at: string;
 }
 
+export interface PlaylistPeek {
+  id: number;
+  title: string;
+  content: string;
+  category_id: number;
+  category_name: string;
+  position: number;
+}
+
 export interface CreatePlaylistRequest {
   name: string;
   description?: string;
@@ -72,5 +81,49 @@ export class PlaylistService {
         Authorization: `Bearer ${token}`,
       },
     });
+  }
+
+  getPlaylistPeeks(playlistId: number): Observable<PlaylistPeek[]> {
+    const token = localStorage.getItem('token');
+
+    return this.http.get<PlaylistPeek[]>(`${this.apiUrl}/playlists/${playlistId}/peeks`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  addPeekToPlaylist(
+    playlistId: number,
+    peekId: number,
+    position: number,
+  ): Observable<{ message: string }> {
+    const token = localStorage.getItem('token');
+
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/playlists/${playlistId}/peeks`,
+      {
+        peek_id: peekId,
+        position,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  }
+
+  removePeekFromPlaylist(playlistId: number, peekId: number): Observable<{ message: string }> {
+    const token = localStorage.getItem('token');
+
+    return this.http.delete<{ message: string }>(
+      `${this.apiUrl}/playlists/${playlistId}/peeks/${peekId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
   }
 }

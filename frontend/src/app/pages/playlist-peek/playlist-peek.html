@@ -1,0 +1,74 @@
+<div class="min-h-screen bg-zinc-950 px-6 py-10 text-white">
+  <div class="mx-auto max-w-4xl">
+    <button
+      type="button"
+      (click)="goBack()"
+      class="mb-8 text-sm text-zinc-400 transition hover:text-white"
+    >
+      ← Back to Playlist
+    </button>
+
+    @if (errorMessage()) {
+      <div
+        class="mb-6 rounded-xl border border-red-900 bg-red-950/40 px-4 py-3 text-sm text-red-300"
+      >
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (currentPeek(); as peek) {
+      <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
+        <!-- Header -->
+        <div class="mb-8">
+          <span class="rounded-lg bg-zinc-800 px-3 py-1.5 text-xs text-zinc-400">
+            {{ peek.category_name }}
+          </span>
+
+          <h1 class="mt-4 text-3xl font-bold">
+            {{ peek.title }}
+          </h1>
+
+          @if (playlist(); as currentPlaylist) {
+            <p class="mt-2 text-sm text-zinc-500">Playlist: {{ currentPlaylist.name }}</p>
+          }
+        </div>
+
+        <!-- Content -->
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-950 p-6">
+          <p class="whitespace-pre-wrap text-sm leading-7 text-zinc-300">
+            {{ peek.content }}
+          </p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="mt-8 flex items-center justify-between border-t border-zinc-800 pt-6">
+          <button
+            type="button"
+            (click)="previousPeek()"
+            [disabled]="isFirstPeek()"
+            class="rounded-xl border border-zinc-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            &lt; Previous
+          </button>
+
+          <div class="text-center">
+            <p class="text-sm text-zinc-400">
+              {{ getCurrentPosition() }} / {{ playlistPeeks().length }}
+            </p>
+
+            <p class="mt-1 text-xs text-zinc-600">Peek</p>
+          </div>
+
+          <button
+            type="button"
+            (click)="nextPeek()"
+            [disabled]="isLastPeek()"
+            class="rounded-xl border border-zinc-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            Next &gt;
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -6,6 +6,9 @@ import { guestGuard } from './guards/guest.guard';
 import { Peeks } from './pages/peeks/peeks';
 import { PeekDetail } from './pages/peek-detail/peek-detail';
 import { Overlay } from './pages/overlay/overlay';
+import { Playlists } from './pages/playlists/playlists';
+import { PlaylistDetail } from './pages/playlist-detail/playlist-detail';
+import { PlaylistPeekPage } from './pages/playlist-peek/playlist-peek';
 
 export const routes: Routes = [
   {
@@ -33,6 +36,22 @@ export const routes: Routes = [
     component: Overlay,
     canActivate: [authGuard],
   },
+  {
+    path: 'playlists',
+    component: Playlists,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'playlists/:id',
+    component: PlaylistDetail,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'playlists/:playlistId/peek/:peekId',
+    component: PlaylistPeekPage,
+    canActivate: [authGuard],
+  },
+
   {
     path: '',
     redirectTo: 'login',
