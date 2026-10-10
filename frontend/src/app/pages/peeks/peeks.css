@@ -1,0 +1,67 @@
+/* Markdown preview in Peek cards */
+.peek-content-preview {
+  overflow-wrap: anywhere;
+}
+
+.peek-content-preview pre {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  overflow-x: auto;
+  border: 1px solid #3f3f46;
+  border-radius: 0.5rem;
+  background: #18181b;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.peek-content-preview pre code {
+  display: block;
+  padding: 0;
+  background: transparent;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.peek-content-preview p {
+  margin: 0.25rem 0;
+}
+
+.peek-content-preview ul,
+.peek-content-preview ol {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
+.peek-content-preview ul {
+  list-style: disc;
+}
+
+.peek-content-preview ol {
+  list-style: decimal;
+}
+
+/* Keep syntax highlighting colors in the preview */
+.peek-content-preview pre code .hljs-keyword {
+  color: #c084fc;
+}
+
+.peek-content-preview pre code .hljs-string {
+  color: #86efac;
+}
+
+.peek-content-preview pre code .hljs-title,
+.peek-content-preview pre code .hljs-built_in {
+  color: #67e8f9;
+}
+
+.peek-content-preview pre code .hljs-number,
+.peek-content-preview pre code .hljs-literal {
+  color: #fbbf24;
+}
+
+.peek-content-preview pre code .hljs-comment {
+  color: #a1a1aa;
+  font-style: italic;
+}

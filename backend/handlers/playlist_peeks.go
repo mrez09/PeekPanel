@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -154,7 +155,12 @@ func GetPlaylistPeeks(pool *pgxpool.Pool) http.HandlerFunc {
 		)
 
 		if err != nil {
-			http.Error(w, `{"message":"Gagal mengambil Peek playlist"}`, http.StatusInternalServerError)
+			log.Printf("GetPlaylistPeeks query error: %v", err)
+			http.Error(
+				w,
+				`{"message":"Gagal mengambil Peek dalam playlist"}`,
+				http.StatusInternalServerError,
+			)
 			return
 		}
 

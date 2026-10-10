@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -19,7 +20,12 @@ func GetCategories(pool *pgxpool.Pool) http.HandlerFunc {
 		)
 
 		if err != nil {
-			http.Error(w, `{"message":"Failed to get categories"}`, http.StatusInternalServerError)
+			log.Printf("GetCategories query error: %v", err)
+			http.Error(
+				w,
+				`{"message":"Failed to get categories"}`,
+				http.StatusInternalServerError,
+			)
 			return
 		}
 		defer rows.Close()
@@ -48,7 +54,12 @@ func GetCategories(pool *pgxpool.Pool) http.HandlerFunc {
 		}
 
 		if err := rows.Err(); err != nil {
-			http.Error(w, `{"message":"Failed to read categories"}`, http.StatusInternalServerError)
+			log.Printf("GetCategories rows error: %v", err)
+			http.Error(
+				w,
+				`{"message":"Failed to read categories"}`,
+				http.StatusInternalServerError,
+			)
 			return
 		}
 

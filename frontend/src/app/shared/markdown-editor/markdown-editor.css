@@ -1,0 +1,274 @@
+
+:host {
+  display: block;
+}
+.markdown-editor-host {
+  min-height: 18rem;
+  background: #09090b;
+}
+.markdown-editor-host .cm-editor {
+  min-height: 18rem;
+  color: #e4e4e7;
+  background: #09090b;
+  outline: none;
+}
+.markdown-editor-host .cm-scroller {
+  min-height: 18rem;
+  overflow: auto;
+  font-family: Consolas, 'Courier New', monospace;
+  line-height: 1.7;
+}
+.markdown-editor-host .cm-gutters {
+  border-right: 1px solid #27272a;
+  color: #71717a;
+  background: #09090b;
+}
+.markdown-editor-host .cm-activeLine,
+.markdown-editor-host .cm-activeLineGutter {
+  background: #18181b;
+}
+.markdown-editor-host .cm-cursor {
+  border-left-color: #67e8f9;
+}
+.markdown-editor-host .cm-selectionBackground {
+  background: #164e63 !important;
+}
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3 {
+  margin: 1rem 0 0.5rem;
+  color: #fafafa;
+  font-weight: 700;
+}
+.markdown-preview h1 {
+  font-size: 1.5rem;
+}
+.markdown-preview h2 {
+  font-size: 1.25rem;
+}
+.markdown-preview p {
+  margin: 0.75rem 0;
+}
+.markdown-preview ul {
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+.markdown-preview ol {
+  padding-left: 1.5rem;
+  list-style: decimal;
+}
+.markdown-preview pre {
+  overflow-x: auto;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #27272a;
+  border-radius: 0.75rem;
+  background: #18181b;
+}
+.markdown-preview code {
+  font-family: Consolas, 'Courier New', monospace;
+}
+.markdown-preview :not(pre) > code {
+  border-radius: 0.25rem;
+  background: #27272a;
+  padding: 0.15rem 0.3rem;
+  color: #67e8f9;
+}
+
+/* TipTap Visual Editor */
+.markdown-editor-host .ProseMirror {
+  min-height: 18rem;
+  padding: 1rem;
+  color: #e4e4e7;
+  background: #09090b;
+  outline: none;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.markdown-editor-host .ProseMirror p {
+  margin: 0.5rem 0;
+}
+
+.markdown-editor-host .ProseMirror h1,
+.markdown-editor-host .ProseMirror h2,
+.markdown-editor-host .ProseMirror h3 {
+  margin: 1rem 0 0.5rem;
+  color: #fafafa;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.markdown-editor-host .ProseMirror h1 {
+  font-size: 1.75rem;
+}
+
+.markdown-editor-host .ProseMirror h2 {
+  font-size: 1.4rem;
+}
+
+.markdown-editor-host .ProseMirror h3 {
+  font-size: 1.15rem;
+}
+
+.markdown-editor-host .ProseMirror ul,
+.markdown-editor-host .ProseMirror ol {
+  padding-left: 1.5rem;
+  margin: 0.75rem 0;
+}
+
+.markdown-editor-host .ProseMirror ul {
+  list-style: disc;
+}
+
+.markdown-editor-host .ProseMirror ol {
+  list-style: decimal;
+}
+
+.markdown-editor-host .ProseMirror blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid #52525b;
+  color: #a1a1aa;
+}
+
+.markdown-editor-host .ProseMirror pre {
+  overflow-x: auto;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #3f3f46;
+  border-radius: 0.75rem;
+  background: #18181b;
+  font-family: Consolas, 'Courier New', monospace;
+}
+
+.markdown-editor-host .ProseMirror code {
+  border-radius: 0.25rem;
+  background: #27272a;
+  padding: 0.15rem 0.3rem;
+  color: #67e8f9;
+  font-family: Consolas, 'Courier New', monospace;
+}
+
+.markdown-editor-host .ProseMirror pre code {
+  padding: 0;
+  background: transparent;
+  color: #e4e4e7;
+}
+
+.markdown-editor-host .ProseMirror p.is-editor-empty:first-child::before {
+  color: #71717a;
+  content: 'Mulai tulis catatan kamu...';
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/**Markdoen*/
+/* Syntax highlighting for TipTap code blocks */
+.markdown-editor-host .ProseMirror pre {
+  overflow-x: auto;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #3f3f46;
+  border-radius: 0.75rem;
+  background: #18181b;
+  color: #e4e4e7;
+  font-family: Consolas, 'Courier New', monospace;
+  line-height: 1.7;
+}
+
+.markdown-editor-host .ProseMirror pre code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+}
+
+/* Keywords: func, return, if, const, class */
+.markdown-editor-host .ProseMirror .hljs-keyword,
+.markdown-editor-host .ProseMirror .hljs-selector-tag {
+  color: #c084fc;
+}
+
+/* Strings */
+.markdown-editor-host .ProseMirror .hljs-string,
+.markdown-editor-host .ProseMirror .hljs-attr {
+  color: #86efac;
+}
+
+/* Function names */
+.markdown-editor-host .ProseMirror .hljs-title,
+.markdown-editor-host .ProseMirror .hljs-title.function_,
+.markdown-editor-host .ProseMirror .hljs-built_in {
+  color: #67e8f9;
+}
+
+/* Numbers and literals */
+.markdown-editor-host .ProseMirror .hljs-number,
+.markdown-editor-host .ProseMirror .hljs-literal {
+  color: #fbbf24;
+}
+
+/* Comments */
+.markdown-editor-host .ProseMirror .hljs-comment {
+  color: #a1a1aa;
+  font-style: italic;
+}
+
+/* Types and classes */
+.markdown-editor-host .ProseMirror .hljs-type,
+.markdown-editor-host .ProseMirror .hljs-class {
+  color: #f0abfc;
+}
+
+/* Operators and punctuation */
+.markdown-editor-host .ProseMirror .hljs-operator,
+.markdown-editor-host .ProseMirror .hljs-punctuation {
+  color: #d4d4d8;
+}
+
+/**Tiptap*/
+/* Fix: syntax highlighting for TipTap + Lowlight */
+.ProseMirror pre code .hljs-keyword,
+.ProseMirror pre code .hljs-selector-tag {
+  color: #c084fc !important;
+}
+
+.ProseMirror pre code .hljs-string,
+.ProseMirror pre code .hljs-attr {
+  color: #86efac !important;
+}
+
+.ProseMirror pre code .hljs-title,
+.ProseMirror pre code .hljs-title.function_,
+.ProseMirror pre code .hljs-built_in {
+  color: #67e8f9 !important;
+}
+
+.ProseMirror pre code .hljs-number,
+.ProseMirror pre code .hljs-literal {
+  color: #fbbf24 !important;
+}
+
+.ProseMirror pre code .hljs-comment {
+  color: #a1a1aa !important;
+  font-style: italic;
+}
+
+.ProseMirror pre code .hljs-type,
+.ProseMirror pre code .hljs-class {
+  color: #f0abfc !important;
+}
+
+.ProseMirror pre code .hljs-function {
+  color: #67e8f9 !important;
+}
+
+.ProseMirror pre code .hljs-params {
+  color: #fbbf24 !important;
+}
+
+:host ::ng-deep .ProseMirror pre code .hljs-keyword {
+  color: #c084fc !important;
+}

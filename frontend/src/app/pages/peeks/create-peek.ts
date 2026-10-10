@@ -10,9 +10,15 @@ import {
 import { FormsModule } from '@angular/forms';
 import { PeekService } from '../../services/peek.service';
 
+import { MarkdownEditor } from '../../shared/markdown-editor/markdown-editor';
+
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
+import hljs from 'highlight.js';
+
 @Component({
   selector: 'app-create-peek',
-  imports: [FormsModule],
+  imports: [FormsModule, MarkdownEditor],
   templateUrl: './create-peek.html',
 })
 export class CreatePeek implements OnChanges {
@@ -35,6 +41,25 @@ export class CreatePeek implements OnChanges {
   categories = signal<{ id: number; name: string }[]>([]);
   errorMessage = '';
   successMessage = '';
+
+  editorMode: 'write' | 'preview' = 'write';
+  previewHtml = '';
+
+  updatePreview() {
+    const html = marked.parse(this.content || '', {
+      async: false,
+    }) as string;
+
+    this.previewHtml = DOMPurify.sanitize(html);
+  }
+
+  setEditorMode(mode: 'write' | 'preview') {
+    this.editorMode = mode;
+
+    if (mode === 'preview') {
+      this.updatePreview();
+    }
+  }
 
   constructor(private peekService: PeekService) {}
 

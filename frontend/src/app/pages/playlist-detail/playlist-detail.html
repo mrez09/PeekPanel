@@ -86,8 +86,17 @@
                         {{ peek.title }}
                       </h3>
 
-                      <p class="mt-2 whitespace-pre-wrap text-sm leading-6 text-zinc-400">
+                      <p
+                        class="mt-2 line-clamp-3 whitespace-pre-wrap break-words text-sm leading-6 text-zinc-400"
+                      >
                         {{ peek.content }}
+                      </p>
+
+                      <p
+                        (click)="openPlaylistPeek(peek.id)"
+                        class="mt-2 text-xs font-medium text-zinc-500"
+                      >
+                        Buka catatan untuk membaca selengkapnya →
                       </p>
                     </div>
 

@@ -1,0 +1,121 @@
+<div class="overflow-hidden rounded-xl border border-zinc-700 bg-zinc-950">
+  <!-- Toolbar -->
+  <div
+    class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 bg-zinc-900 px-3 py-2"
+  >
+    <div class="flex flex-wrap items-center gap-1">
+      <button
+        type="button"
+        (click)="insertFormatting('**')"
+        title="Bold"
+        class="rounded-md px-3 py-2 text-sm font-bold text-zinc-300 hover:bg-zinc-800 hover:text-white"
+      >
+        B
+      </button>
+
+      <button
+        type="button"
+        (click)="insertFormatting('*')"
+        title="Italic"
+        class="rounded-md px-3 py-2 text-sm italic text-zinc-300 hover:bg-zinc-800 hover:text-white"
+      >
+        I
+      </button>
+
+      <button
+        type="button"
+        (click)="insertFormatting('`')"
+        title="Inline code"
+        class="rounded-md px-3 py-2 text-sm text-cyan-300 hover:bg-zinc-800"
+      >
+        &lt;/&gt;
+      </button>
+
+      <button
+        type="button"
+        (click)="insertCodeBlock()"
+        title="Code block"
+        class="rounded-md px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white"
+      >
+        Code block
+      </button>
+
+      <select
+        aria-label="Bahasa kode"
+        (change)="setCodeLanguage($any($event.target).value)"
+        class="rounded-md border border-zinc-700 bg-zinc-950 px-2 py-2 text-sm text-zinc-300 outline-none"
+      >
+        <option value="">Pilih bahasa</option>
+        <option value="go">Go</option>
+        <option value="sql">SQL</option>
+        <option value="html">HTML</option>
+        <option value="javascript">JavaScript</option>
+        <option value="css">CSS</option>
+        <option value="json">JSON</option>
+        <option value="typescript">TypeScript</option>
+      </select>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-1">
+      <button
+        type="button"
+        (click)="setMode('visual')"
+        class="rounded-md px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white"
+      >
+        Visual
+      </button>
+
+      <button
+        type="button"
+        (click)="setMode('markdown')"
+        class="rounded-md px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white"
+      >
+        Markdown
+      </button>
+
+      <button
+        type="button"
+        (click)="setMode('preview')"
+        class="rounded-md px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white"
+      >
+        Preview
+      </button>
+    </div>
+  </div>
+
+  <!-- Editor information -->
+  <div class="flex items-center justify-between border-b border-zinc-800 px-4 py-2">
+    <span class="text-xs text-zinc-500">PeekPanel Editor</span>
+    <span class="rounded bg-zinc-800 px-2 py-1 text-xs text-cyan-300">
+      {{
+        editorMode === 'visual'
+          ? 'Visual Mode'
+          : editorMode === 'markdown'
+            ? 'Markdown Source'
+            : 'Preview'
+      }}
+    </span>
+  </div>
+
+  <!-- Visual editor: exactly one editorHost -->
+  <div
+    #editorHost
+    [hidden]="editorMode !== 'visual'"
+    class="markdown-editor-host min-h-72 text-sm"
+  ></div>
+
+  <!-- Markdown source: exactly one sourceHost -->
+  <div
+    #sourceHost
+    [hidden]="editorMode !== 'markdown'"
+    class="markdown-source-host min-h-72 text-sm"
+  ></div>
+
+  <!-- Preview: exactly one preview block -->
+  @if (editorMode === 'preview') {
+    <div
+      class="markdown-preview min-h-72 bg-zinc-950 p-4 text-sm text-zinc-100"
+      [innerHTML]="previewHtml"
+    ></div>
+  }
+</div>

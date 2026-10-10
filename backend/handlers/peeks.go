@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -32,9 +33,11 @@ func GetPeeks(pool *pgxpool.Pool) http.HandlerFunc {
 		)
 
 		if err != nil {
+			log.Printf("GetPeeks query error: %v", err)
 			http.Error(w, `{"message":"Failed to get peeks"}`, http.StatusInternalServerError)
 			return
 		}
+		
 		defer rows.Close()
 
 		type PeekResponse struct {

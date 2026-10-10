@@ -53,13 +53,7 @@
     <div>
       <label class="mb-2 block text-sm font-medium text-zinc-300"> Content </label>
 
-      <textarea
-        [(ngModel)]="content"
-        name="content"
-        rows="8"
-        placeholder="Write your notes, reference, walkthrough..."
-        class="w-full resize-y rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-zinc-500"
-      ></textarea>
+      <app-markdown-editor [(value)]="content" />
     </div>
 
     <div class="flex justify-end gap-3">

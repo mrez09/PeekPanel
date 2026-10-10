@@ -62,8 +62,14 @@
             </div>
           </div>
 
-          <p class="whitespace-pre-wrap text-sm leading-6 text-zinc-400">
-            {{ peek.content }}
+          <div
+            class="peek-content-preview line-clamp-3 break-words text-sm leading-6 text-zinc-400"
+            [innerHTML]="renderMarkdown(peek.content)"
+          ></div>
+
+          <p class="mt-2 text-xs font-medium text-zinc-500">
+            Read full note
+            <span aria-hidden="true">→</span>
           </p>
 
           <div class="mt-6 flex gap-2">

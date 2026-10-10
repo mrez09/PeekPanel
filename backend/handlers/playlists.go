@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -262,6 +263,13 @@ func GetPlaylist(pool *pgxpool.Pool) http.HandlerFunc {
 		)
 
 		if err != nil {
+			log.Printf(
+				"GetPlaylist error: playlistID=%s userID=%v error=%v",
+				playlistID,
+				userID,
+				err,
+			)
+
 			http.Error(
 				w,
 				`{"message":"Playlist tidak ditemukan"}`,
