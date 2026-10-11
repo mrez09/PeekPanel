@@ -49,6 +49,12 @@ func main() {
 	http.HandleFunc("/api/peeks/{id}", middleware.Auth(handlers.Peeks(pool)))
 	http.HandleFunc("/api/categories", middleware.Auth(handlers.GetCategories(pool)))
 
+	http.HandleFunc("/api/playlists", middleware.Auth(handlers.Playlists(pool)))
+	http.HandleFunc("/api/playlists/{id}", middleware.Auth(handlers.Playlists(pool)))
+
+	http.HandleFunc("/api/playlists/{id}/peeks", middleware.Auth(handlers.PlaylistPeeks(pool)))
+	http.HandleFunc("DELETE /api/playlists/{id}/peeks/{peekId}", middleware.Auth(handlers.RemovePeekFromPlaylist(pool)))
+
 	//log.Println("🚀 PeekPanel API running on http://localhost:8080")
 
 	//log.Fatal(http.ListenAndServe(":8080", withCORS(http.DefaultServeMux)))

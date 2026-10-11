@@ -34,11 +34,10 @@
         </div>
 
         <!-- Content -->
-        <div class="rounded-2xl border border-zinc-800 bg-zinc-950 p-6">
-          <p class="whitespace-pre-wrap text-sm leading-7 text-zinc-300">
-            {{ peek.content }}
-          </p>
-        </div>
+        <div
+          class="playlist-peek-content-preview mt-2 line-clamp-3 break-words text-sm leading-6 text-zinc-400"
+          [innerHTML]="renderMarkdown(peek.content)"
+        ></div>
 
         <!-- Navigation -->
         <div class="mt-8 flex items-center justify-between border-t border-zinc-800 pt-6">

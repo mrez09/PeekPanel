@@ -86,11 +86,10 @@
                         {{ peek.title }}
                       </h3>
 
-                      <p
-                        class="mt-2 line-clamp-3 whitespace-pre-wrap break-words text-sm leading-6 text-zinc-400"
-                      >
-                        {{ peek.content }}
-                      </p>
+                      <div
+                        class="playlist-peek-content-preview mt-2 line-clamp-3 break-words text-sm leading-6 text-zinc-400"
+                        [innerHTML]="renderMarkdown(peek.content)"
+                      ></div>
 
                       <p
                         (click)="openPlaylistPeek(peek.id)"
@@ -169,30 +168,41 @@
             <button
               type="button"
               (click)="togglePeek(peek.id)"
-              class="flex w-full items-center gap-4 rounded-xl border p-4 text-left transition"
+              [disabled]="isPeekInPlaylist(peek.id)"
+              class="flex w-full items-center gap-4 rounded-xl border p-4 text-left transition disabled:cursor-not-allowed"
               [class.border-white]="selectedPeekIds().includes(peek.id)"
               [class.bg-zinc-800]="selectedPeekIds().includes(peek.id)"
               [class.border-zinc-800]="!selectedPeekIds().includes(peek.id)"
+              [class.opacity-50]="isPeekInPlaylist(peek.id)"
             >
               <div
                 class="flex h-5 w-5 shrink-0 items-center justify-center rounded border"
                 [class.border-white]="selectedPeekIds().includes(peek.id)"
                 [class.bg-white]="selectedPeekIds().includes(peek.id)"
+                [class.border-zinc-700]="isPeekInPlaylist(peek.id)"
               >
                 @if (selectedPeekIds().includes(peek.id)) {
                   <span class="text-xs text-zinc-900">✓</span>
+                } @else if (isPeekInPlaylist(peek.id)) {
+                  <span class="text-xs text-zinc-400">✓</span>
                 }
               </div>
 
-              <div class="min-w-0">
-                <p class="truncate font-medium">
-                  {{ peek.title }}
-                </p>
+              <div class="min-w-0 flex-1">
+                <p class="font-medium text-white">{{ peek.title }}</p>
 
-                <p class="mt-1 text-xs text-zinc-500">
+                <p class="mt-1 text-sm text-zinc-400">
                   {{ peek.category_name }}
                 </p>
               </div>
+
+              @if (isPeekInPlaylist(peek.id)) {
+                <span
+                  class="shrink-0 rounded-full border border-zinc-700 px-2.5 py-1 text-xs text-zinc-400"
+                >
+                  Already in playlist
+                </span>
+              }
             </button>
           }
         </div>

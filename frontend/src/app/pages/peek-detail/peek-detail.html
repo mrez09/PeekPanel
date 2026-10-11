@@ -59,10 +59,9 @@
         </div>
 
         <div
-          class="border-t border-zinc-800 pt-6 whitespace-pre-wrap text-sm leading-7 text-zinc-300"
-        >
-          {{ currentPeek.content }}
-        </div>
+          class="peek-detail-content border-t border-zinc-800 pt-6 text-sm leading-7 text-zinc-300"
+          [innerHTML]="renderMarkdown(currentPeek.content)"
+        ></div>
       </article>
     }
   </div>
